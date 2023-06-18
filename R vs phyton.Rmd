@@ -1,0 +1,186 @@
+---
+title: "R vs Python"
+subtitle: "Equivalent common data analysis functions in R and Python"
+author: "Inmaculada Ruiz-Morales"
+date: "`r Sys.Date()`"
+output: html_document
+theme: "cerulean" 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE )
+```
+
+
+For this exercise, I am going to use a dataset containing information on community pharmacy activity in Scotland, covering February 2023 for all NHS health boards. Data was retrieved from Public Health Scotland website https://www.opendata.nhs.scot/dataset/prescriptions-in-the-community/resource/ad6d7f4e-08fd-40ed-ad49-bf450d386f39?inner_span=True
+
+
+## To write Python in RMarkdown
+
+First, you will need to install the reticulate package, after that, you can write python code using the {python} chunk header.*the header {python} will automatically use the reticulate package.*
+
+
+## Importing packages 
+
+```{r}
+library(tidyverse)
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+
+## read csv files 
+
+
+Be patient...it will take some time to load the data 
+
+```{r}
+# reading the data with R
+r_path = "https://www.opendata.nhs.scot/dataset/84393984-14e9-4b0d-a797-b288db64d088/resource/ad6d7f4e-08fd-40ed-ad49-bf450d386f39/download/pitc202302.csv"
+r_data <- read_csv(r_path)
+```
+
+
+```{python}
+# reading the data with phyton 
+py_path = "https://www.opendata.nhs.scot/dataset/84393984-14e9-4b0d-a797-b288db64d088/resource/ad6d7f4e-08fd-40ed-ad49-bf450d386f39/download/pitc202302.csv"
+py_data = pd.read_csv(py_path)
+```
+
+## to see the first few rows and the last ones
+
+```{r}
+head(r_data)
+```
+
+```{r}
+tail(r_data)
+```
+
+```{python}
+py_data.head()
+```
+
+```{python}
+py_data.tail()
+```
+
+## Find what type of object we have 
+
+```{r}
+class(r_data)
+```
+
+```{python}
+type(py_data)
+```
+
+## Dimensions of the dataset.
+
+```{r}
+dim(r_data)
+```
+
+```{python}
+py_data.shape
+```
+
+
+## Summary of the dataset.
+
+```{r}
+str(r_data)
+```
+
+
+```{python}
+py_data.info()
+```
+
+
+## Summary of the statistical properties of the dataset.
+
+```{r}
+summary(r_data)
+```
+
+```{python}
+py_data.describe()
+```
+
+## print column names
+
+```{r}
+colnames(r_data)
+```
+
+```{python}
+py_data.columns
+```
+
+## to see unique categories in a variable
+
+```{r}
+unique(r_data$HBT)
+```
+
+```{python}
+pd.unique(py_data["HBT"])
+```
+
+## Counts values for items dispensed
+
+```{r}
+r_data %>% 
+  count(r_data$BNFItemDescription)
+```
+
+Python gives you the values sorted in descending order. 
+
+```{python}
+py_data['BNFItemDescription'].value_counts()
+```
+
+Lets see the 40 most frequently dispensed items in February 2023
+
+```{python}
+Pmost_dispensed =  py_data['BNFItemDescription'].value_counts()
+Pmost_dispensed.head(40)
+```
+
+
+Same result with R code. *(notice that R is also counting the NA)*  
+
+```{r}
+Rmost_dispensed <- r_data %>%
+  count(r_data$BNFItemDescription) %>%
+  arrange(desc(n))
+head(Rmost_dispensed, 40) %>%
+  kable()
+```
+
+
+```{r}
+Rmost_dispensed <- r_data %>%
+  count(r_data$BNFItemDescription) %>%
+  arrange(desc(n)) %>%
+  setNames(c("BNF Item Description", "Frecuency"))
+
+head(Rmost_dispensed, 40) %>%
+  kable()
+
+```
+
+
+
+
+>www.inmaruiz.com
+
+
+
+
+
