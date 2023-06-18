@@ -1,4 +1,4 @@
-# Top40Drugs
+# Top 40 dispensed drugs in Scotland
 R-Markdown document that compares code in R and Python for the most common and basic functions in exploratory data analysis. 
 
 The dataset I used is a real-world dataset from Public Health Scotland that contains information on community pharmacy activity. 
